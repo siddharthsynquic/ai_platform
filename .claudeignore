@@ -1,0 +1,56 @@
+# === SECRETS & CREDENTIALS ===
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+*.cert
+secrets/
+credentials/
+
+# === DEPENDENCIES ===
+node_modules/
+.pnp/
+.pnp.js
+
+# === BUILD ARTIFACTS ===
+dist/
+build/
+.next/
+out/
+.nuxt/
+.output/
+*.tsbuildinfo
+
+# === CACHE ===
+.cache/
+.parcel-cache/
+.eslintcache
+*.log
+logs/
+
+# === DATABASE ===
+*.sqlite
+*.db
+dump.sql
+
+# === LOCK FILES (noisy, not helpful) ===
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# === TEST COVERAGE ===
+coverage/
+.nyc_output/
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === GENERATED ===
+**/generated/
+*.generated.ts
+prisma/migrations/*   
+# Note: Add migrations back manually when schema work is needed

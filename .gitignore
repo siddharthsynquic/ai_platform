@@ -1,0 +1,210 @@
+# ==============================================================
+# Root .gitignore — Architerrax AI Platform
+# ==============================================================
+
+# ------------------ Python (backend) --------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual envs
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# uv
+.uv/
+uv.lock
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+nosetests.xml
+.cache
+
+# Type checkers / linters
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.pyre/
+.pytype/
+
+# Jupyter
+.ipynb_checkpoints
+
+# ------------------ Node / Frontend ---------------------------
+node_modules/
+.pnp
+.pnp.js
+.pnp.cjs
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+out/
+.next/
+.nuxt/
+.svelte-kit/
+.astro/
+.output/
+
+# Vite / Vitest
+.vite/
+vite.config.ts.timestamp-*
+vitest.config.ts.timestamp-*
+
+# PWA workbox generated
+sw.js
+sw.js.map
+workbox-*.js
+workbox-*.js.map
+
+# Package manager
+.pnpm-store/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.yarn-integrity
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ------------------ Env / Secrets -----------------------------
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.staging
+*.pem
+*.key
+*.crt
+secrets/
+credentials.json
+service-account*.json
+.gcp/
+.aws/
+
+# ------------------ App storage (backend runtime) -------------
+backend/storage/uploads/*
+backend/storage/extracted/**/*
+backend/storage/standard_details/*
+!backend/storage/uploads/.gitkeep
+!backend/storage/extracted/.gitkeep
+!backend/storage/extracted/text/.gitkeep
+!backend/storage/extracted/ocr/.gitkeep
+!backend/storage/standard_details/.gitkeep
+
+# Alembic auto-gen artifacts (keep versions/, ignore .pyc)
+backend/app/migrations/versions/__pycache__/
+
+# ------------------ Databases (local) -------------------------
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+pgdata/
+postgres_data/
+redis_data/
+
+# ------------------ Docker -----------------------------------
+.docker/
+docker-compose.override.yml
+
+# ------------------ IDE / Editor -----------------------------
+.vscode/
+!.vscode/settings.json.example
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+.project
+.classpath
+.settings/
+*.iml
+.history/
+
+# ------------------ OS ----------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ------------------ Misc --------------------------------------
+*.bak
+*.tmp
+*.temp
+tmp/
+temp/
+.cache/
+.parcel-cache/
+
+# Local AI/ML artifacts
+*.pkl
+*.pt
+*.pth
+*.onnx
+*.bin
+!.gitkeep
+
+# Local scratch / notes
+scratch/
+notes.local.md
+TODO.local.md
+
+
+.claude
+.github
+agent_docs
+docs
+BLUEPRINT.md
+CLAUDE.md
