@@ -1,0 +1,28 @@
+node_modules
+dist
+dist-ssr
+build
+.vite
+.pnpm-store
+.git
+.gitignore
+Dockerfile
+.dockerignore
+README.md
+*.log
+.env
+.env.local
+.env.*.local
+tests
+src/test
+coverage
+.vscode
+.idea
+
+# Heavy site-agent assets — DO NOT ship inside the build context.
+# They're bind-mounted at runtime (see docker-compose.yml `volumes:` on the
+# frontend service). Keeps the build context slim (~few MB) so Docker BuildKit
+# doesn't RPC-EOF on Windows/limited hosts. Linux server: same behavior.
+public/uploads
+public/reports
+public/site-data/images

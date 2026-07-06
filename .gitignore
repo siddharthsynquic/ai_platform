@@ -201,6 +201,15 @@ scratch/
 notes.local.md
 TODO.local.md
 
+# Client reference files (heavy: raw 2GB+ source — kept out of git)
+client_reference_files/
+
+# Heavy site-agent assets — NOT in git (2GB+). Sir ko separate zip/CDN se dena.
+# Docker compose bind-mounts these paths at runtime (see docker-compose.yml).
+frontend/public/uploads/
+frontend/public/reports/
+frontend/public/site-data/images/
+
 
 .claude
 .github
