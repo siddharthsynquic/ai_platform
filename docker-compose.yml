@@ -1,0 +1,133 @@
+# ────────────────────────────────────────────────────────────────
+# Architerrax AI Platform — Docker Compose
+#
+# Services:
+#   frontend   → nginx serving Vite build   (host :3000  → container :80)
+#   backend    → FastAPI + uvicorn          (host :8000  → container :8000)
+#   mongo      → MongoDB 7                  (host :27017 → container :27017)
+#   redis      → Redis 7                    (host :6379  → container :6379)
+#
+# Network: `ai_platform_net` (bridge) — all services resolve each other by name.
+#
+# Usage:
+#   docker compose up -d --build
+#   docker compose logs -f frontend backend
+#   docker compose down
+# ────────────────────────────────────────────────────────────────
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: ai_platform_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-mongo}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-mongo}
+      MONGO_INITDB_DATABASE: ${MONGO_DB:-ai_platform}
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongo_data:/data/db
+      - mongo_config:/data/configdb
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "--quiet",
+          "--eval",
+          "db.adminCommand({ ping: 1 }).ok ? 0 : 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 5
+    networks:
+      - ai_platform_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: ai_platform_redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - ai_platform_net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: ai_platform_backend:latest
+    container_name: ai_platform_backend
+    restart: unless-stopped
+    environment:
+      # App
+      APP_ENV: ${APP_ENV:-production}
+      # DB (MongoDB — auth against admin DB, then use app DB)
+      MONGO_URL: mongodb://${MONGO_USER:-mongo}:${MONGO_PASSWORD:-mongo}@mongo:27017/${MONGO_DB:-ai_platform}?authSource=admin
+      MONGO_DB_NAME: ${MONGO_DB:-ai_platform}
+      # Redis
+      REDIS_URL: redis://redis:6379/0
+      # Bind
+      HOST: "0.0.0.0"
+      PORT: "8000"
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    volumes:
+      - backend_storage:/app/storage
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8000/api/v1/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      start_period: 20s
+      retries: 5
+    networks:
+      - ai_platform_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: ai_platform_frontend:latest
+    container_name: ai_platform_frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    # Heavy site-agent assets are bind-mounted from the host (kept out of the
+    # build context to avoid Docker BuildKit RPC failures on huge contexts).
+    # On the deploy host these paths must exist in the git checkout —
+    # they're committed to the repo.
+    volumes:
+      - ./frontend/public/uploads:/usr/share/nginx/html/uploads:ro
+      - ./frontend/public/reports:/usr/share/nginx/html/reports:ro
+      - ./frontend/public/site-data/images:/usr/share/nginx/html/site-data/images:ro
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost/ >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    networks:
+      - ai_platform_net
+
+networks:
+  ai_platform_net:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  mongo_config:
+  backend_storage:

@@ -33,7 +33,9 @@ class Settings(BaseSettings):
     )
 
     # Database + Redis (wired when persistence lands)
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/ai_platform"
+    # MongoDB — Motor async driver used when repositories land.
+    mongo_url: str = "mongodb://mongo:mongo@localhost:27017/ai_platform?authSource=admin"
+    mongo_db_name: str = "ai_platform"
     redis_url: str = "redis://localhost:6379/0"
 
     # Auth / JWT
