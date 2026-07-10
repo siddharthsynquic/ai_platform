@@ -1,19 +1,4 @@
-# ────────────────────────────────────────────────────────────────
-# Architerrax AI Platform — Docker Compose
-#
-# Services:
-#   frontend   → nginx serving Vite build   (host :3000  → container :80)
-#   backend    → FastAPI + uvicorn          (host :8000  → container :8000)
-#   mongo      → MongoDB 7                  (host :27017 → container :27017)
-#   redis      → Redis 7                    (host :6379  → container :6379)
-#
-# Network: `ai_platform_net` (bridge) — all services resolve each other by name.
-#
-# Usage:
-#   docker compose up -d --build
-#   docker compose logs -f frontend backend
-#   docker compose down
-# ────────────────────────────────────────────────────────────────
+
 
 services:
   mongo:
